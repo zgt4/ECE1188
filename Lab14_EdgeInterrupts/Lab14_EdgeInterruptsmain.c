@@ -51,7 +51,9 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "../inc/Clock.h"
 #include "../inc/CortexM.h"
 #include "../inc/LaunchPad.h"
-#include "../inc/Motor.h"
+//#include "../inc/Motor.h"
+#include "../inc/MotorSimple.c"
+#include "..\inc\SysTick.c" //this has to go when I have Alex's part
 #include "../inc/BumpInt.h"
 #include "../inc/TExaS.h"
 #include "../inc/TimerA1.h"
@@ -59,25 +61,37 @@ policies, either expressed or implied, of the FreeBSD Project.
 
 uint8_t CollisionData, CollisionFlag;  // mailbox
 void HandleCollision(uint8_t bumpSensor){
-   Motor_Stop();
+
+   //Motor_Stop(); // lab 13 Version
+   Motor_StopSimp(); // will modify
    CollisionData = bumpSensor;
    CollisionFlag = 1;
+  /* LaunchPad_Output(0x01); //debug light
+   //these are going to Modify once Alex R is done w/ his module
+   Motor_BackwardSimp(3000, 200);
+   Motor_LeftSimp(3000, 100);
+   LaunchPad_Output(0x00); //debug light off
+   */
 }
-int main1(void){  // test of interrupt-driven bump interface
+int main(void){  // test of interrupt-driven bump interface
   Clock_Init48MHz();   // 48 MHz clock; 12 MHz Timer A clock
   CollisionFlag = 0;
-  Motor_Init();        // activate Lab 13 software
-  Motor_Forward(7500,7500); // 50%
+  //Motor_Init();        // Need Alex's part
+  Motor_InitSimple();
+  SysTick_Init(); //This will have to go once I have Alex's part
+  //Motor_Forward(7500,7500); // 50% //Need Alex's part
   BumpInt_Init(&HandleCollision);
+  //Motor_ForwardSimp(3000, 1000);
   TExaS_Init(LOGICANALYZER_P4_765320);
   EnableInterrupts();
   while(1){
     WaitForInterrupt();
+    Motor_ForwardSimp(7000,100);
   }
 }
 
 
-int main(void){
+int main2(void){
   DisableInterrupts();
   Clock_Init48MHz();   // 48 MHz clock; 12 MHz Timer A clock
 
