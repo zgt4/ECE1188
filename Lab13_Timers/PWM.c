@@ -46,6 +46,9 @@ void PWM_Init1(uint16_t period, uint16_t duty){
 void PWM_Init12(uint16_t period, uint16_t duty1, uint16_t duty2){
   if(duty1 >= period) return; // bad input
   if(duty2 >= period) return; // bad input
+  /************************************
+  * I think these below should be 0xC0*
+  ************************************/
   P2->DIR |= 0x30;          // P2.6, P2.7 output
   P2->SEL0 |= 0x30;         // P2.6, P2.7 Timer0A functions
   P2->SEL1 &= ~0x30;        // P2.6, P2.7 Timer0A functions
