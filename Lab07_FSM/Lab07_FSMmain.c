@@ -44,12 +44,13 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "../inc/clock.h"
 #include "../inc/LaunchPad.h"
 #include "../inc/Texas.h"
-#include "../inc/CortexM.h"
-#include "../inc/Motor.h"
-#include "../inc/BumpInt.h"
+#include "../inc/CortexM.c"
+#include "../inc/Motor.c"
+#include "../inc/BumpInt.c"
 #include "../inc/TimerA1.h"
 #include "../inc/FlashProgram.h"
-#include "../inc/PWM.h"
+#include "../inc/PWM.c"
+#include "..\inc\SysTick.c"
 
 
 //#include "../inc/BumpInt.c"
