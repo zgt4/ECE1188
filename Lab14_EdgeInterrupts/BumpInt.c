@@ -50,6 +50,7 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "msp.h"
 //added includes
 #include "../inc/CortexM.h" //EnableInterrupt() along with Disable... and WaitFor...
+#include "../inc/Motor.h"
 // Initialize Bump sensors
 // Make six Port 4 pins inputs
 // Activate interface pullup
@@ -90,12 +91,18 @@ uint8_t Bump_Read(void){
 // triggered on touch, falling edge
 void PORT4_IRQHandler(void){
     // write this as part of Lab 14
-    Motor_StopSimp();
+    //Motor_StopSimp();
+    Motor_Stop();
     //LaunchPad_Output(0x01); //debug light
     //these are going to Modify once Alex R is done w/ his module
-    Motor_BackwardSimp(3000, 200);
-    Motor_LeftSimp(3000, 100);
+    //Motor_BackwardSimp(3000, 200);
+    Motor_Backward(5000,5000);
+    SysTick_Wait10ms(200);
+    //Motor_LeftSimp(3000, 100);
+    Motor_Left(3000,5000);
+    SysTick_Wait10ms(100);
     //LaunchPad_Output(0x00); //debug light off
+    Motor_Stop();
     P4->IFG &= ~0xFF;
 }
 
