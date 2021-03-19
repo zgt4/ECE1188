@@ -148,7 +148,17 @@ int32_t Reflectance_Position(uint8_t data){
 // Output: none
 // Assumes: Reflectance_Init() has been called
 void Reflectance_Start(void){
-    // write this as part of Lab 10
+
+    P5->OUT |= 0x08; //turn on IR LEDs
+    P9->OUT |= 0x04;
+
+    //make P7.0-P7.7 outputs and pulse for 10us then make inputs again
+    P7->DIR = 0xFF;
+    P7->OUT = 0xFF;
+
+    Clock_Delay1us(10);
+    P7->DIR = 0x00;
+
 }
 
 
@@ -161,8 +171,27 @@ void Reflectance_Start(void){
 // Assumes: Reflectance_Init() has been called
 // Assumes: Reflectance_Start() was called 1 ms ago
 uint8_t Reflectance_End(void){
-    // write this as part of Lab 10
- return 0; // replace this line
+
+    uint8_t data;
+
+    data = P7->IN;
+    P5->OUT &= 0xF7; //turn off LEDs
+    P9->OUT &= 0xFB;
+
+    int8_t position;
+
+    if(data >= 0x20 && data != 0x30){
+        position = 2; //10 robot is to the right of the line
+    }else if(data <= 8 && data > 0){
+        position = 1; //01 robot is to the left of the line
+    }else if(data == 0){
+        position = 0; //00 robot is off the line
+    }else{
+        position = 3; //11 robot is centered on the line
+    }
+
+    return position;
+
 }
 
 
